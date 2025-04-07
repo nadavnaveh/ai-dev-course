@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>לפתח אפליקציות עם GenAI - שני קורסים לבנות את המוצר שלך</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --background: #1a1a1a;
+        --text-primary: #b2d272; /* ירוק בהיר */
+        --text-secondary: #c9aed3; /* סגול בהיר */
+        --accent: #80b34f; /* ירוק כהה יותר */
+        --dark-accent: #424242; /* אפור כהה */
+        --light-bg: #2a2a2a; /* רקע בהיר יותר */
+        --white: #f0f0f0;
+        --text-white-main: #f5f5f5;
+        --text-white-subtle: #cccccc;
+    }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      scroll-behavior: smooth; /* Added for smooth scrolling */
+    }
+
+    @keyframes blob {
+      0% { transform: translate(0px, 0px) scale(1); }
+      33% { transform: translate(30px, -50px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+      100% { transform: translate(0px, 0px) scale(1); }
+    }
+    .animate-blob { animation: blob 7s infinite; }
+    .animation-delay-2000 { animation-delay: 2s; }
+    .animation-delay-4000 { animation-delay: 4s; }
+
+    @keyframes slide-up {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-slide-up { animation: slide-up 0.7s ease-out forwards; }
+
+    .transition-all {
+      transition-property: all;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 300ms;
+    }
+    .ease-apple {
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .text-gradient-primary {
+      background-image: linear-gradient(to right, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .text-gradient-secondary {
+      background-image: linear-gradient(to right, var(--text-secondary), #a98eb3);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .text-gradient-white {
+       background-image: linear-gradient(to right, var(--text-white-main), var(--text-white-subtle));
+       -webkit-background-clip: text;
+       background-clip: text;
+       color: transparent;
+    }
+
+    /* Removed the ::before pseudo-element as Tailwind classes handle icons and spacing */
+    /* .includes li::before { ... } */
+    /* .includes li { ... } */
+
+    /* Style for image placeholders */
+    .image-placeholder {
+        aspect-ratio: 1 / 1; /* Square aspect ratio */
+        background-color: var(--dark-accent);
+        border-radius: 0.5rem; /* rounded-lg */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-white-subtle);
+        opacity: 0.5;
+        margin-bottom: 1rem; /* mb-4 */
+        border: 1px solid var(--dark-accent);
+    }
+
+    /* Ensure clickable elements have appropriate cursor */
+    button, a[href] {
+      cursor: pointer;
+    }
+
+    /* Improve visibility of back-to-top on smaller screens */
+    #back-to-top {
+        bottom: 1.5rem;
+        left: 1.5rem; /* Changed from right to left for RTL consistency */
+    }
+
+    @media (max-width: 640px) { /* sm breakpoint */
+        #back-to-top {
+            bottom: 1rem;
+            left: 1rem;
+            width: 2.5rem; /* 40px */
+            height: 2.5rem; /* 40px */
+        }
+        #back-to-top i {
+            font-size: 0.875rem; /* text-sm */
+        }
+    }
+
+  </style>
+</head>
+<body class="bg-gradient-to-b from-[var(--background)] to-[#222] text-[var(--text-white-main)] transition-colors duration-300">
+
+  <section class="relative pt-16 pb-20 overflow-hidden">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-6xl max-h-6xl opacity-75 md:opacity-100">
+      <div class="absolute top-0 right-0 w-72 h-72 md:w-96 md:h-96 bg-[var(--text-primary)]/10 rounded-full blur-3xl opacity-50 animate-blob"></div>
+      <div class="absolute top-0 left-0 w-72 h-72 md:w-96 md:h-96 bg-[var(--text-secondary)]/10 rounded-full blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+      <div class="absolute bottom-0 right-1/4 w-72 h-72 md:w-96 md:h-96 bg-[var(--accent)]/10 rounded-full blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <div class="container mx-auto px-4 md:px-6 relative z-10">
+      <div class="flex flex-col items-center text-center space-y-8">
+        <div class="space-y-6 max-w-3xl animate-slide-up">
+          <div class="inline-block mb-4">
+            <div class="flex items-center gap-2 px-4 py-2 bg-[var(--light-bg)] rounded-full text-sm font-medium text-[var(--text-primary)] border border-[var(--accent)]/50 shadow-sm">
+              <!-- Added margin-left (ml-2) for RTL spacing -->
+              <i class="fas fa-star text-sm ml-2"></i>
+              <span>שני קורסים. שלוש חבילות. אינסוף אפשרויות לבנות מוצרי תוכנה.</span>
+            </div>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-gradient-white leading-tight">
+            פיתוח תוכנה עם GenAI <span class="text-gradient-primary">גם בלי לדעת לתכנת</span>
+          </h1>
+          <p class="text-lg sm:text-xl text-[var(--text-white-subtle)] max-w-2xl mx-auto">
+            שני קורסים שילמדו אותך איך לפתח אפליקציות בעזרת בינה מלאכותית – מהיסודות, דרך <strong>Lovable.dev ו-Base44</strong> ועד לעבודה עם סטנדרט תעשייתי של גוגל וטכנולוגיות מתקדמות.
+          </p>
+        </div>
+
+
+        <div class="relative w-full max-w-4xl mx-auto mt-12 animate-slide-up" style="animation-delay: 0.4s;">
+          <div class="aspect-[16/9] bg-gradient-to-br from-[var(--light-bg)]/50 to-[var(--dark-accent)]/50 overflow-hidden rounded-xl border border-[var(--dark-accent)] shadow-2xl shadow-[var(--text-primary)]/5">
+            <div class="absolute inset-0 flex items-center justify-center p-2 sm:p-6">
+               <!-- Adjusted spacing and icon sizes for better mobile view -->
+               <div class="flex items-center space-x-2 sm:space-x-4 rtl:space-x-reverse">
+                   <div class="flex flex-col space-y-1 sm:space-y-2 items-center text-center">
+                       <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-lg bg-[var(--dark-accent)] border border-[var(--text-secondary)]/30 flex items-center justify-center text-[var(--text-secondary)] opacity-70">
+                         <i class="fas fa-lightbulb text-sm sm:text-lg"></i>
+                       </div>
+                       <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-lg bg-[var(--dark-accent)] border border-[var(--text-secondary)]/30 flex items-center justify-center text-[var(--text-secondary)] opacity-50">
+                         <i class="fas fa-rocket text-xs sm:text-sm"></i>
+                       </div>
+                       <div class="text-[10px] sm:text-xs text-[var(--text-white-subtle)] mt-1 leading-tight">רעיון<br class="hidden sm:inline"> מוצר</div>
+                   </div>
+                   <i class="fas fa-long-arrow-alt-left text-lg sm:text-2xl text-[var(--accent)] opacity-60 mx-1 sm:mx-2"></i>
+                   <div class="flex flex-col items-center text-center">
+                       <div class="w-12 h-12 sm:w-20 sm:h-20 rounded-full border-2 sm:border-4 border-[var(--accent)] flex items-center justify-center bg-[var(--light-bg)] shadow-lg shadow-[var(--accent)]/20">
+                            <i class="fas fa-robot text-lg sm:text-2xl text-[var(--accent)]"></i>
+                       </div>
+                       <div class="text-[10px] sm:text-xs text-[var(--text-white-subtle)] mt-1 leading-tight">קורסי<br class="hidden sm:inline"> GenAI</div>
+                   </div>
+                   <i class="fas fa-long-arrow-alt-left text-lg sm:text-2xl text-[var(--text-primary)] opacity-80 mx-1 sm:mx-2"></i>
+                   <div class="flex flex-col items-center text-center">
+                       <div class="w-10 h-10 sm:w-16 sm:h-16 rounded-lg bg-[var(--light-bg)] border-2 border-[var(--text-primary)]/50 flex items-center justify-center text-[var(--text-primary)] shadow-md shadow-[var(--text-primary)]/10">
+                         <i class="fas fa-mobile-alt text-base sm:text-xl"></i>
+                       </div>
+                       <div class="text-[10px] sm:text-xs text-[var(--text-white-subtle)] mt-1 leading-tight">מוצר<br class="hidden sm:inline"> סופי</div>
+                   </div>
+               </div>
+            </div>
+          </div>
+          <div class="absolute -bottom-5 sm:-bottom-6 left-1/2 transform -translate-x-1/2 w-[90%] sm:w-auto">
+            <div class="px-3 py-2 sm:px-6 sm:py-3 rounded-full text-[10px] sm:text-sm font-medium bg-[var(--light-bg)]/80 backdrop-blur-md shadow-lg border border-[var(--accent)]/30 text-[var(--text-primary)] text-center whitespace-normal sm:whitespace-nowrap">
+              גם בלי ידע בתכנות <span class="hidden sm:inline">•</span><br class="sm:hidden"> ניהול פרויקט מלא <span class="hidden sm:inline">•</span><br class="sm:hidden"> פתרונות תעשייתיים
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="for-who" class="py-16 sm:py-20 bg-gradient-to-b from-[#222] to-[var(--background)]">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="text-center mb-12 sm:mb-16 animate-on-scroll">
+        <div class="inline-block mb-4">
+          <div class="px-4 py-2 bg-[var(--light-bg)] rounded-full text-sm font-medium text-[var(--text-primary)] border border-[var(--accent)]/50">
+            למי הקורסים שלנו מתאימים?
+          </div>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[var(--white)]">
+          פיתוח אפליקציות עם AI <span class="text-gradient-primary">נגיש לכולם</span>
+        </h2>
+        <p class="text-base sm:text-lg text-[var(--text-white-subtle)] max-w-2xl mx-auto">
+          הגישה המודולרית שלנו מאפשרת לכל אחד להשתלב – בין אם אתה רק מתחיל או כבר עם רקע טכני
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto">
+        <!-- Card 1 -->
+        <div class="bg-[var(--light-bg)] rounded-xl shadow-lg border border-[var(--dark-accent)] overflow-hidden hover:shadow-[0_0_20px_rgba(178,210,114,0.15)] transition-all duration-300 animate-on-scroll transform hover:-translate-y-1 sm:hover:-translate-y-2">
+          <div class="bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent)] h-2"></div>
+          <div class="p-6">
+            <div class="w-12 h-12 bg-[var(--dark-accent)] rounded-lg flex items-center justify-center mb-4">
+              <i class="fas fa-lightbulb text-xl text-[var(--text-primary)]"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--white)] mb-3">יזמים ובעלי עסקים</h3>
+            <p class="text-[var(--text-white-subtle)] text-sm mb-4">
+              רוצים להוציא רעיונות לפועל בלי לחכות לצוות פיתוח יקר? הקורסים שלנו נותנים לך יכולת ועצמאות לבנות MVP אמיתי.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-[var(--light-bg)] rounded-xl shadow-lg border border-[var(--dark-accent)] overflow-hidden hover:shadow-[0_0_20px_rgba(178,210,114,0.15)] transition-all duration-300 animate-on-scroll transform hover:-translate-y-1 sm:hover:-translate-y-2" style="animation-delay: 0.1s;">
+           <div class="bg-gradient-to-r from-[var(--accent)] to-[var(--text-secondary)] h-2"></div>
+          <div class="p-6">
+            <div class="w-12 h-12 bg-[var(--dark-accent)] rounded-lg flex items-center justify-center mb-4">
+              <i class="fas fa-bullhorn text-xl text-[var(--accent)]"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--white)] mb-3">אנשי תוכן ושיווק</h3>
+            <p class="text-[var(--text-white-subtle)] text-sm mb-4">
+              רוצים להתקדם מקצועית? השילוב של הבנה טכנולוגית עם יכולות תוכן ושיווק הוא שילוב מנצח בשוק העבודה של היום ומחר.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-[var(--light-bg)] rounded-xl shadow-lg border border-[var(--dark-accent)] overflow-hidden hover:shadow-[0_0_20px_rgba(178,210,114,0.15)] transition-all duration-300 animate-on-scroll transform hover:-translate-y-1 sm:hover:-translate-y-2" style="animation-delay: 0.2s;">
+           <div class="bg-gradient-to-r from-[var(--text-secondary)] to-[var(--text-primary)] h-2"></div>
+          <div class="p-6">
+            <div class="w-12 h-12 bg-[var(--dark-accent)] rounded-lg flex items-center justify-center mb-4">
+              <i class="fas fa-laptop-code text-xl text-[var(--text-secondary)]"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--white)] mb-3">מתעניינים בטכנולוגיה</h3>
+            <p class="text-[var(--text-white-subtle)] text-sm mb-4">
+              רוצים להבין איך דברים עובדים באמת? הקורסים שלנו נותנים לך הצצה מעמיקה לעולם הפיתוח והבינה המלאכותית, עם תרגול מעשי.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+         <div class="bg-[var(--light-bg)] rounded-xl shadow-lg border border-[var(--dark-accent)] overflow-hidden hover:shadow-[0_0_20px_rgba(178,210,114,0.15)] transition-all duration-300 animate-on-scroll transform hover:-translate-y-1 sm:hover:-translate-y-2" style="animation-delay: 0.3s;">
+           <div class="bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent)] h-2"></div>
+          <div class="p-6">
+            <div class="w-12 h-12 bg-[var(--dark-accent)] rounded-lg flex items-center justify-center mb-4">
+              <i class="fas fa-certificate text-xl text-[var(--text-primary)]"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--white)] mb-3">בוגרי קורסים אחרים</h3>
+            <p class="text-[var(--text-white-subtle)] text-sm mb-4">
+              מחפשים את השלב הבא? הקורסים שלנו נותנים לך שליטה עמוקה בכלים אמיתיים של התעשייה ויכולת הובלת פרויקטים מקצה לקצה.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="courses" class="py-16 sm:py-20 bg-gradient-to-b from-[var(--background)] to-[#222]">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="text-center mb-12 sm:mb-16 animate-on-scroll">
+        <div class="inline-block mb-4">
+          <div class="px-4 py-2 bg-[var(--light-bg)] rounded-full text-sm font-medium text-[var(--text-primary)] border border-[var(--accent)]/50">
+            הקורסים שלנו
+          </div>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[var(--white)]">
+          שני <span class="text-gradient-primary">קורסים משלימים</span> לבניית אפליקציות
+        </h2>
+        <p class="text-base sm:text-lg text-[var(--text-white-subtle)] max-w-2xl mx-auto">
+          מהבסיס ועד הסטאק המקצועי – בחר את המסלול המתאים לך או שלב ביניהם
+        </p>
+      </div>
+
+      <!-- Course 1 -->
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 sm:mb-20 animate-on-scroll">
+          <div class="bg-[var(--light-bg)] rounded-xl overflow-hidden shadow-lg border border-[var(--text-primary)]/30">
+            <div class="bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent)] h-2"></div>
+            <div class="p-6 md:p-8">
+              <div class="flex items-start mb-6">
+                <!-- Adjusted icon size and margin -->
+                <div class="w-12 h-12 sm:w-16 sm:h-16 bg-[var(--dark-accent)] rounded-lg flex items-center justify-center ml-4 flex-shrink-0">
+                  <i class="fas fa-rocket text-xl sm:text-2xl text-[var(--text-primary)]"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold text-[var(--white)] mb-1 sm:mb-2">קורס בסיסי</h3>
+                  <div class="text-lg sm:text-xl font-medium text-[var(--text-primary)] leading-tight">לפתח אפליקציות עם AI – גם בלי קוד</div>
+                </div>
+              </div>
+
+              <p class="text-sm sm:text-base text-[var(--text-white-subtle)] mb-6">
+                קורס מעשי שילמד אותך לחשוב כמו מתכנת, להבין איך AI משנה את עולם הפיתוח, ולבנות אפליקציות בעזרת כלים מתקדמים - גם בלי לדעת לתכנת.
+              </p>
+
+              <div class="mb-6">
+                <div class="text-lg font-medium text-[var(--white)] mb-3">מה תלמד בקורס:</div>
+                <!-- Increased spacing between icon and text (ml-3) -->
+                <ul class="space-y-3 text-sm sm:text-base text-[var(--text-white-subtle)]">
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>איך בינה מלאכותית משנה את עולם הפיתוח</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>איך לחשוב כמו מתכנת בלי לדעת לתכנת</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>סקירה של סוגי אפליקציות: ווב, מובייל, דסקטופ, סקריפטים ועוד</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>תהליך בחירה נכון לאיזה סוג אפליקציה לפתח</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>כלים פרקטיים: Lawebel.dev ו-Base44 כולל דמו אמיתי</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>איך להוציא מוצר ראשוני מהר</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="bg-[var(--dark-accent)]/30 p-4 rounded-lg mb-6">
+                <div class="font-medium text-[var(--white)] mb-2">תוצאה סופית:</div>
+                <p class="text-sm sm:text-base text-[var(--text-white-subtle)]">דמו של אפליקציה שבנית בעזרת כלי AI מתקדמים, בלי כתיבת קוד.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-center">
+            <!-- Adjusted padding and spacing -->
+            <div class="bg-[var(--light-bg)] rounded-xl overflow-hidden border border-[var(--dark-accent)] p-6 w-full max-w-lg">
+              <h4 class="text-lg sm:text-xl font-bold text-[var(--white)] mb-4 text-center">מתאים במיוחד ל:</h4>
+              <ul class="space-y-4">
+                <li class="flex items-start">
+                  <!-- Increased spacing (ml-3) -->
+                  <div class="w-8 h-8 rounded-full bg-[var(--dark-accent)] flex items-center justify-center flex-shrink-0 ml-3">
+                    <i class="fas fa-user-tie text-[var(--text-primary)]"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-[var(--white)]">יזמים ובעלי עסקים</div>
+                    <p class="text-sm text-[var(--text-white-subtle)]">שרוצים להוציא רעיון לאוויר מהר ובלי קוד</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-8 h-8 rounded-full bg-[var(--dark-accent)] flex items-center justify-center flex-shrink-0 ml-3">
+                    <i class="fas fa-bullhorn text-[var(--text-primary)]"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-[var(--white)]">אנשי שיווק ותוכן</div>
+                    <p class="text-sm text-[var(--text-white-subtle)]">שרוצים להתקדם לעולם הטכנולוגי בלי ללמוד קוד מאפס</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-8 h-8 rounded-full bg-[var(--dark-accent)] flex items-center justify-center flex-shrink-0 ml-3">
+                    <i class="fas fa-brain text-[var(--text-primary)]"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-[var(--white)]">מתעניינים בטכנולוגיה</div>
+                    <p class="text-sm text-[var(--text-white-subtle)]">שרוצים לגשר על הפער בין רעיון למוצר</p>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="mt-6 bg-[var(--dark-accent)]/30 p-4 rounded-lg">
+                 <!-- Increased spacing (ml-3) -->
+                <div class="flex items-center mb-2">
+                  <i class="fas fa-lightbulb text-[var(--text-primary)] ml-3"></i>
+                  <span class="font-medium text-[var(--white)]">היתרון שלנו:</span>
+                </div>
+                <p class="text-[var(--text-white-subtle)] text-sm">
+                  מתמקדים ביכולת המעשית להוציא אפליקציות לאוויר ובחשיבה מערכתית נכונה במקום הוראות טכניות יבשות. למידה מתוך עשייה.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 2 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate-on-scroll" style="animation-delay: 0.1s;">
+          <div class="order-2 md:order-1 flex items-center justify-center">
+            <!-- Adjusted padding and spacing -->
+            <div class="bg-[var(--light-bg)] rounded-xl overflow-hidden border border-[var(--dark-accent)] p-6 w-full max-w-lg">
+              <h4 class="text-lg sm:text-xl font-bold text-[var(--white)] mb-4 text-center">מתאים במיוחד ל:</h4>
+              <ul class="space-y-4">
+                <li class="flex items-start">
+                  <!-- Increased spacing (ml-3) -->
+                  <div class="w-8 h-8 rounded-full bg-[var(--dark-accent)] flex items-center justify-center flex-shrink-0 ml-3">
+                    <i class="fas fa-laptop-code text-[var(--text-secondary)]"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-[var(--white)]">בוגרי הקורס הראשון</div>
+                    <p class="text-sm text-[var(--text-white-subtle)]">שרוצים להעמיק ולשדרג את היכולות שלהם</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-8 h-8 rounded-full bg-[var(--dark-accent)] flex items-center justify-center flex-shrink-0 ml-3">
+                    <i class="fas fa-code text-[var(--text-secondary)]"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-[var(--white)]">בעלי רקע טכני בסיסי</div>
+                    <p class="text-sm text-[var(--text-white-subtle)]">שרוצים להרחיב את הכלים שלהם לפיתוח מקצועי יותר</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-8 h-8 rounded-full bg-[var(--dark-accent)] flex items-center justify-center flex-shrink-0 ml-3">
+                    <i class="fas fa-rocket text-[var(--text-secondary)]"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-[var(--white)]">יזמים שאפתניים</div>
+                    <p class="text-sm text-[var(--text-white-subtle)]">שרוצים שליטה מלאה ועצמאית בפיתוח המוצר שלהם</p>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="mt-6 bg-[var(--dark-accent)]/30 p-4 rounded-lg">
+                <!-- Increased spacing (ml-3) -->
+                <div class="flex items-center mb-2">
+                  <i class="fas fa-star text-[var(--text-secondary)] ml-3"></i>
+                  <span class="font-medium text-[var(--white)]">היתרון שלנו:</span>
+                </div>
+                <p class="text-[var(--text-white-subtle)] text-sm">
+                  משלבים ידע ממשי בסטאק טכנולוגי פופולרי עם יכולות AI מתקדמות - שילוב שמאפשר לך לנהל פרויקטים מורכבים בעצמך.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-1 md:order-2 bg-[var(--light-bg)] rounded-xl overflow-hidden shadow-lg border border-[var(--text-secondary)]/30">
+            <div class="bg-gradient-to-r from-[var(--text-secondary)] to-[var(--accent)] h-2"></div>
+            <div class="p-6 md:p-8">
+              <div class="flex items-start mb-6">
+                <!-- Adjusted icon size and margin -->
+                <div class="w-12 h-12 sm:w-16 sm:h-16 bg-[var(--dark-accent)] rounded-lg flex items-center justify-center ml-4 flex-shrink-0">
+                  <i class="fas fa-code text-xl sm:text-2xl text-[var(--text-secondary)]"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold text-[var(--white)] mb-1 sm:mb-2">קורס מתקדם</h3>
+                  <div class="text-lg sm:text-xl font-medium text-[var(--text-secondary)] leading-tight">GenAI Web Development</div>
+                </div>
+              </div>
+
+              <p class="text-sm sm:text-base text-[var(--text-white-subtle)] mb-6">
+                קורס מעמיק שילמד אותך לעבוד עם AI בצורה חכמה ואפקטיבית - כמו מפתח אמיתי, תוך שימוש בסטאק טכנולוגי תעשייתי ועבודה על פרויקט מורכב.
+              </p>
+
+              <div class="mb-6">
+                <div class="text-lg font-medium text-[var(--white)] mb-3">מה תלמד בקורס:</div>
+                <!-- Increased spacing between icon and text (ml-3) -->
+                <ul class="space-y-3 text-sm sm:text-base text-[var(--text-white-subtle)]">
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-secondary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>איך לעבוד עם AI בצורה חכמה ומעמיקה – כמו מפתח אמיתי</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-secondary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>פתרון באגים בעזרת שיחה עם AI, דיבאגינג ותיקונים לוגיים</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-secondary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>תקשורת נכונה עם מודלי AI לבניית קוד נקי ומדויק</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-secondary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>עבודה עם סטאק תעשייתי: Next.js, Firebase, Google Cloud</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-[var(--text-secondary)] mt-1 ml-3 flex-shrink-0"></i>
+                    <span>ניהול מבנה פרויקט מקצועי – ארכיטקטורה, קומפוננטות וסטייטים</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="bg-[var(--dark-accent)]/30 p-4 rounded-lg mb-6">
+                <div class="font-medium text-[var(--white)] mb-2">תוצאה סופית:</div>
+                <p class="text-sm sm:text-base text-[var(--text-white-subtle)]">אפליקציית ווב חיה ומורכבת שבנית בעזרת GenAI – כולל ניהול עצמי מלא של הפרויקט.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- New Instructor Section -->
+  <section id="instructor" class="py-16 sm:py-20 bg-gradient-to-b from-[var(--background)] to-[#222]">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="text-center mb-12 sm:mb-16 animate-on-scroll">
+        <div class="inline-block mb-4">
+          <div class="px-4 py-2 bg-[var(--light-bg)] rounded-full text-sm font-medium text-[var(--text-primary)] border border-[var(--accent)]/50">
+            הכירו את מנחה הקורס
+          </div>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[var(--white)]">
+          אז מי <span class="text-gradient-primary">אני?</span>
+        </h2>
+      </div>
+
+      <div class="max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center animate-on-scroll">
+          <!-- Instructor Image with styling similar to other elements -->
+          <div class="flex justify-center md:justify-start order-1 md:order-1">
+            <div class="relative w-48 h-48 sm:w-64 sm:h-64 rounded-xl overflow-hidden border-2 border-[var(--text-primary)]/30 shadow-lg shadow-[var(--text-primary)]/10">
+              <img src="images/my-image.png" alt="נדב - מנחה הקורס" class="w-full h-full object-cover">
+              <!-- Decorative element similar to other sections -->
+              <div class="absolute -bottom-2 -right-2 w-24 h-24 bg-[var(--text-primary)]/10 rounded-full blur-xl"></div>
+              <div class="absolute -top-2 -left-2 w-20 h-20 bg-[var(--text-secondary)]/10 rounded-full blur-xl"></div>
+            </div>
+          </div>
+          
+          <!-- Instructor Bio -->
+          <div class="order-2 md:order-2 text-center md:text-right">
+            <h3 class="text-xl sm:text-2xl font-bold text-[var(--white)] mb-3">שלום, שמי נדב.</h3>
+            <div class="space-y-4 text-sm sm:text-base text-[var(--text-white-subtle)]">
+              <p>יזם טכנולוגי, בעל תואר ראשון במדעי המחשב מהטכניון, וחוקר טכנולוגיות AI.</p>
+              
+              <p>מאז השקת ChatGPT לפני כ-3 שנים, יצאתי למסע בעל מטרה אחת- להנגיש את עולם התוכנה לכל אדם באשר הוא.</p>
+              
+              <p>מהפכת ה-GenAI העניקה לנו מתנה- היכולת ליצור תוכנה באמצעות שפה חופשית, וכל שנותר היה לבנות את הדרך הנכונה לקבלת תוצאה מיטבית.
+              אז פיתחתי עבורכם שיטה ייחודית, ובאמצעותה תוכלו ליצור קוד ותוכנה ביתר קלות ובחינם לגמרי- מבלי לשלם על כלים יקרים.</p>
+              
+              <p>AI משתלב בכל תחומי העיסוק, ובמיוחד בפיתוח התוכנה. אז הצטרפו אלינו וקבלו את סט כלים שיהפוך אתכם ליוצרי תוכנה - מקצוע העתיד של ההייטק.</p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials" class="py-16 sm:py-20 bg-gradient-to-b from-[#222] to-[var(--background)]">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="text-center mb-12 sm:mb-16 animate-on-scroll">
+        <div class="inline-block mb-4">
+          <div class="px-4 py-2 bg-[var(--light-bg)] rounded-full text-sm font-medium text-[var(--text-primary)] border border-[var(--accent)]/50">
+            מה אומרים הבוגרים שלנו
+          </div>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[var(--white)]">
+          סיפורי <span class="text-gradient-primary">הצלחה</span> 
+        </h2>
+        <p class="text-base sm:text-lg text-[var(--text-white-subtle)] max-w-2xl mx-auto">
+          אל תקשיב רק לנו - ראה מה אומרים האנשים שכבר התנסו בקורסים שלנו
+        </p>
+      </div>
+
+      <div class="max-w-6xl mx-auto mt-12">
+        <!-- Adjusted layout for better mobile display -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <!-- Testimonial screenshots with improved layout - single column on mobile -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-on-scroll" style="animation-delay: 0.3s;">
+            <div class="rounded-lg overflow-hidden shadow-md bg-[var(--dark-accent)]/30 p-2">
+              <img src="images/test-1.jpg" alt="תגובה מבוגר קורס" class="w-full h-auto max-h-48 sm:max-h-32 object-contain rounded">
+            </div>
+            <div class="rounded-lg overflow-hidden shadow-md bg-[var(--dark-accent)]/30 p-2">
+              <img src="images/test-2.jpg" alt="תגובה מבוגר קורס" class="w-full h-auto max-h-48 sm:max-h-32 object-contain rounded">
+            </div>
+            <div class="rounded-lg overflow-hidden shadow-md bg-[var(--dark-accent)]/30 p-2">
+              <img src="images/test-3.png" alt="תגובה מבוגר קורס" class="w-full h-auto max-h-48 sm:max-h-32 object-contain rounded">
+            </div>
+            <div class="rounded-lg overflow-hidden shadow-md bg-[var(--dark-accent)]/30 p-2">
+              <img src="images/test-4.jpeg" alt="תגובה מבוגר קורס" class="w-full h-auto max-h-48 sm:max-h-32 object-contain rounded">
+            </div>
+          </div>
+          
+          <!-- Right side text - unchanged -->
+          <div class="animate-on-scroll text-center md:text-right" style="animation-delay: 0.4s;">
+            <h3 class="text-xl sm:text-2xl font-bold text-[var(--white)] mb-4">הצטרף ל-<span class="text-gradient-primary">בוגרים</span> שכבר בונים מוצרים עם AI</h3>
+            <p class="text-sm sm:text-base text-[var(--text-white-subtle)] mb-6">
+              הקהילה שלנו ממשיכה לצמוח, והבוגרים שלנו יוצרים פרויקטים מרשימים ומציאותיים עם הידע והכלים שהם מקבלים בקורסים.
+            </p>
+          </div>
+        </div>
+    </div>
+  </section>
+
+
+  <section id="pricing" class="py-16 sm:py-20 bg-gradient-to-b from-[#222] to-[var(--background)]">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="text-center mb-12 sm:mb-16 animate-on-scroll">
+        <div class="inline-block mb-4">
+          <div class="px-4 py-2 bg-[var(--light-bg)] rounded-full text-sm font-medium text-[var(--text-primary)] border border-[var(--accent)]/50">
+            השוואת אפשרויות
+          </div>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[var(--white)]">
+          בחר את <span class="text-gradient-primary">המסלול המתאים לך</span>
+        </h2>
+        <p class="text-base sm:text-lg text-[var(--text-white-subtle)] max-w-2xl mx-auto">
+          גמישות מלאה - בחר קורס אחד או את שני הקורסים יחד בהנחה משמעותית
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <!-- Package 1 -->
+        <div class="bg-[var(--light-bg)] rounded-xl overflow-hidden shadow-lg border border-[var(--dark-accent)] hover:shadow-[0_0_30px_rgba(178,210,114,0.15)] transition-all duration-300 animate-on-scroll transform hover:-translate-y-1 sm:hover:-translate-y-2">
+          <div class="bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent)] h-2"></div>
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-center text-[var(--white)] mb-2">Start & Build</h3>
+            <p class="text-center text-[var(--text-white-subtle)] text-sm mb-6">קורס 1 בלבד – פיתוח עם כלים ויזואליים</p>
+
+            <div class="text-center mb-8">
+              <div class="text-4xl sm:text-5xl font-bold text-[var(--text-primary)]">₪1,790</div>
+              <div class="text-[var(--text-white-subtle)] text-sm mt-2">תשלום חד פעמי</div>
+            </div>
+
+             <!-- Increased spacing between icon and text (ml-3) -->
+            <div class="space-y-4 mb-8">
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">קורס פיתוח בעזרת AI בלי קוד</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">כל חומרי הלימוד והתרגול</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">תרגול מעשי עם Lawebel ו-Base44</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">כלים מקצועיים לעבודה מהירה</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">גישה לקבוצת תמיכה</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">ליווי במהלך הקורס</p>
+                </div>
+              </div>
+              <div class="flex items-start opacity-40">
+                <i class="fas fa-times text-red-400 mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--text-white-subtle)]">קורס GenAI Web Development</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">לא כלול</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <a href="#" class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full text-[var(--background)] bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent)] hover:brightness-110 shadow-md hover:shadow-lg transition-all">
+                הצטרף עכשיו
+                <i class="fas fa-arrow-left mr-2"></i>
+              </a>
+              <div class="mt-3 text-[var(--text-white-subtle)] text-xs">מתאים ל: יזמים, אנשי שיווק, מתחילים</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Package 3 (Featured - Creator Pro) -->
+        <div class="bg-[var(--light-bg)] rounded-xl overflow-hidden shadow-2xl border-2 border-[var(--text-primary)] relative animate-on-scroll transform hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(178,210,114,0.3)] transition-all duration-300" style="animation-delay: 0.2s;">
+          <div class="absolute top-0 right-0 left-0 z-10">
+            <div class="bg-[var(--text-primary)] text-center text-[var(--background)] font-bold py-1 text-sm">
+              הכי משתלם!
+            </div>
+          </div>
+          <!-- Adjusted margin-top to account for the banner -->
+          <div class="bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] h-2 mt-[26px]"></div>
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-center text-[var(--white)] mb-2">Creator Pro</h3>
+            <p class="text-center text-[var(--text-white-subtle)] text-sm mb-6">שני הקורסים יחד - מסלול מלא לפיתוח ברמה הגבוהה ביותר</p>
+
+            <div class="text-center mb-8">
+              <div class="text-[var(--text-white-subtle)] line-through text-sm">₪4,280</div>
+              <div class="text-4xl sm:text-5xl font-bold text-[var(--text-primary)]">₪3,690</div>
+              <div class="text-[var(--text-white-subtle)] text-sm mt-2">חיסכון של ₪590</div>
+            </div>
+
+            <!-- Increased spacing between icon and text (ml-3) -->
+            <div class="space-y-4 mb-8">
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">קורס פיתוח בעזרת AI בלי קוד</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">מסלול התחלתי מלא</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">קורס GenAI Web Development</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">מסלול מתקדם מלא</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">גישה לקבוצת תמיכה VIP</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">תמיכה מורחבת וליווי מקצועי</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-primary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">בונוס: מודולים מיוחדים</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">תכנים ייחודיים לרוכשי החבילה המלאה</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <a href="#" class="inline-flex items-center justify-center w-full px-6 py-3 sm:py-4 border border-transparent text-base font-bold rounded-full text-[var(--background)] bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] hover:brightness-110 shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                הצטרף עכשיו - חבילה מלאה
+                <i class="fas fa-arrow-left mr-2"></i>
+              </a>
+              <div class="mt-3 text-[var(--text-white-subtle)] text-xs">מתאים ל: יזמים שאפתניים, אנשי מקצוע רציניים</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Package 2 -->
+        <div class="bg-[var(--light-bg)] rounded-xl overflow-hidden shadow-lg border border-[var(--dark-accent)] hover:shadow-[0_0_30px_rgba(201,174,211,0.15)] transition-all duration-300 animate-on-scroll transform hover:-translate-y-1 sm:hover:-translate-y-2" style="animation-delay: 0.1s;">
+          <div class="bg-gradient-to-r from-[var(--text-secondary)] to-[var(--accent)] h-2"></div>
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-center text-[var(--white)] mb-2">Think & Code</h3>
+            <p class="text-center text-[var(--text-white-subtle)] text-sm mb-6">קורס 2 בלבד – פיתוח עם סטאק תעשייתי</p>
+
+            <div class="text-center mb-8">
+              <div class="text-4xl sm:text-5xl font-bold text-[var(--text-secondary)]">₪2,490</div>
+              <div class="text-[var(--text-white-subtle)] text-sm mt-2">תשלום חד פעמי</div>
+            </div>
+
+            <!-- Increased spacing between icon and text (ml-3) -->
+            <div class="space-y-4 mb-8">
+              <div class="flex items-start opacity-40">
+                <i class="fas fa-times text-red-400 mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--text-white-subtle)]">קורס פיתוח בעזרת AI בלי קוד</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">לא כלול</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-secondary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">קורס GenAI Web Development</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">כל חומרי הלימוד המתקדמים</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-secondary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">עבודה עם כלי גוגל והייטק</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">Next.js, Firebase ו-Google Cloud</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-check text-[var(--text-secondary)] mt-1 ml-3 flex-shrink-0"></i>
+                <div>
+                  <div class="font-medium text-[var(--white)]">גישה לקבוצת תמיכה</div>
+                  <p class="text-sm text-[var(--text-white-subtle)]">ליווי במהלך הקורס</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <a href="#" class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full text-[var(--background)] bg-gradient-to-r from-[var(--text-secondary)] to-[var(--accent)] hover:brightness-110 shadow-md hover:shadow-lg transition-all">
+                הצטרף עכשיו
+                <i class="fas fa-arrow-left mr-2"></i>
+              </a>
+              <div class="mt-3 text-[var(--text-white-subtle)] text-xs">מתאים ל: אנשים עם רקע טכני, מתכנתים וסטודנטים</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why-us" class="py-16 sm:py-20 bg-gradient-to-b from-[var(--background)] to-[#222]">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-12 sm:mb-16 animate-on-scroll">
+          <div class="inline-block mb-4">
+            <div class="px-4 py-2 bg-[var(--light-bg)] rounded-full text-sm font-medium text-[var(--text-primary)] border border-[var(--accent)]/50">
+              למה ללמוד איתנו?
+            </div>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[var(--white)]">
+            פיתוח מונחה AI - <span class="text-gradient-primary">בשפה שלך</span>
+          </h2>
+          <p class="text-base sm:text-lg text-[var(--text-white-subtle)] max-w-2xl mx-auto">
+            קורסים שמדברים בשפה שלך, בלי שטויות מיותרות, עם פוקוס על תוצאות אמיתיות
+          </p>
+        </div>
+
+        <!-- Adjusted gap for potentially better mobile spacing -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 animate-on-scroll">
+          <div class="space-y-6">
+            <ul class="space-y-6">
+              <!-- Adjusted margin (ml-4) and text size for consistency -->
+              <li class="flex items-start">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[var(--dark-accent)] flex items-center justify-center ml-4 flex-shrink-0">
+                  <i class="fas fa-comments text-lg sm:text-xl text-[var(--text-primary)]"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg sm:text-xl font-semibold text-[var(--white)] mb-1">שפה ברורה ופשוטה</h3>
+                  <p class="text-sm sm:text-base text-[var(--text-white-subtle)]">מסבירים מושגים מורכבים בצורה נגישה ומובנת, בלי ז'רגון מיותר ועם דוגמאות מעשיות מהחיים האמיתיים.</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[var(--dark-accent)] flex items-center justify-center ml-4 flex-shrink-0">
+                  <i class="fas fa-tools text-lg sm:text-xl text-[var(--text-primary)]"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg sm:text-xl font-semibold text-[var(--white)] mb-1">ידע פרקטי ומעשי</h3>
+                  <p class="text-sm sm:text-base text-[var(--text-white-subtle)]">מתמקדים בכלים ובשיטות שתוכל להשתמש בהם מיד - מצמצמים תיאוריה למינימום הנדרש ומקסימום תרגול מעשי.</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[var(--dark-accent)] flex items-center justify-center ml-4 flex-shrink-0">
+                  <i class="fas fa-rocket text-lg sm:text-xl text-[var(--text-primary)]"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg sm:text-xl font-semibold text-[var(--white)] mb-1">מיקוד בתוצאות</h3>
+                  <p class="text-sm sm:text-base text-[var(--text-white-subtle)]">בסוף כל קורס תצא עם מוצר אמיתי שבנית בעצמך, לא רק עם תעודה או ידע תיאורטי שאין לו שימוש.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="space-y-6">
+            <ul class="space-y-6">
+               <!-- Adjusted margin (ml-4) and text size for consistency -->
+              <li class="flex items-start">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[var(--dark-accent)] flex items-center justify-center ml-4 flex-shrink-0">
+                  <i class="fas fa-chart-line text-lg sm:text-xl text-[var(--text-secondary)]"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg sm:text-xl font-semibold text-[var(--white)] mb-1">כלים רלוונטיים לשוק</h3>
+                  <p class="text-sm sm:text-base text-[var(--text-white-subtle)]">עובדים עם הכלים והטכנולוגיות המובילים בתעשייה - מה שחברות באמת משתמשות בו ומחפשות אצל מועמדים.</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[var(--dark-accent)] flex items-center justify-center ml-4 flex-shrink-0">
+                  <i class="fas fa-users text-lg sm:text-xl text-[var(--text-secondary)]"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg sm:text-xl font-semibold text-[var(--white)] mb-1">קהילה ותמיכה אישית</h3>
+                  <p class="text-sm sm:text-base text-[var(--text-white-subtle)]">מספקים מערך תמיכה מלא - קבוצות סגורות, מענה לשאלות ולבעיות, ועזרה אישית במהלך הלמידה.</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[var(--dark-accent)] flex items-center justify-center ml-4 flex-shrink-0">
+                  <i class="fas fa-sync-alt text-lg sm:text-xl text-[var(--text-secondary)]"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg sm:text-xl font-semibold text-[var(--white)] mb-1">עדכונים שוטפים</h3>
+                  <p class="text-sm sm:text-base text-[var(--text-white-subtle)]">תחום ה-AI משתנה במהירות, ואנחנו מתעדכנים איתו - מקבלים עדכונים לתכנים ולכלים לאורך זמן.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="text-center mt-12 animate-on-scroll">
+          <a href="#pricing" class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border border-transparent text-base sm:text-lg font-medium rounded-full text-[var(--background)] bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent)] hover:brightness-110 shadow-lg hover:shadow-xl transition-all transform hover:scale-105 mb-4">
+            רוצה להתחיל? בחר את המסלול שלך
+            <i class="fas fa-arrow-left mr-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="py-16 sm:py-20 bg-gradient-to-b from-[var(--background)] to-[#222]">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12 sm:mb-16 animate-on-scroll">
+          <div class="inline-block mb-4">
+            <div class="px-4 py-2 bg-[var(--light-bg)] rounded-full text-sm font-medium text-[var(--text-primary)] border border-[var(--accent)]/50">
+              שאלות נפוצות
+            </div>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[var(--white)]">
+            כל מה שרצית <span class="text-gradient-primary">לדעת</span>
+          </h2>
+        </div>
+
+        <div class="space-y-4 sm:space-y-6 animate-on-scroll">
+          <!-- Adjusted padding and text size -->
+          <details class="bg-[var(--light-bg)] rounded-xl shadow-lg border border-[var(--dark-accent)] overflow-hidden group">
+              <summary class="flex justify-between items-center p-4 sm:p-6 cursor-pointer list-none">
+                  <h3 class="text-base sm:text-lg font-semibold text-[var(--white)]">אפשר להתחיל מהקורס השני גם בלי ללמוד את הראשון?</h3>
+                  <span class="transition-transform duration-300 group-open:rotate-180">
+                      <i class="fas fa-chevron-down text-[var(--text-white-subtle)]"></i>
+                  </span>
+              </summary>
+              <div class="p-4 sm:p-6 pt-0 text-sm sm:text-base text-[var(--text-white-subtle)]">
+                  כן! כל קורס עומד בפני עצמו. אם אתה מרגיש בנוח ללמוד בקצב עצמאי ולעבוד עם קוד – הקורס השני מתאים גם כנקודת התחלה.
+              </div>
+          </details>
+
+          <details class="bg-[var(--light-bg)] rounded-xl shadow-lg border border-[var(--dark-accent)] overflow-hidden group">
+              <summary class="flex justify-between items-center p-4 sm:p-6 cursor-pointer list-none">
+                  <h3 class="text-base sm:text-lg font-semibold text-[var(--white)]">האם צריך לדעת לתכנת?</h3>
+                   <span class="transition-transform duration-300 group-open:rotate-180">
+                      <i class="fas fa-chevron-down text-[var(--text-white-subtle)]"></i>
+                  </span>
+              </summary>
+              <div class="p-4 sm:p-6 pt-0 text-sm sm:text-base text-[var(--text-white-subtle)]">
+                  לא. הקורס הראשון לא דורש ידע קודם בכלל. הקורס השני מצריך הבנה בסיסית בלוגיקה או מוכנות ללמוד תוך כדי.
+              </div>
+          </details>
+
+          <details class="bg-[var(--light-bg)] rounded-xl shadow-lg border border-[var(--dark-accent)] overflow-hidden group">
+              <summary class="flex justify-between items-center p-4 sm:p-6 cursor-pointer list-none">
+                  <h3 class="text-base sm:text-lg font-semibold text-[var(--white)]">יש תמיכה אישית בקורס?</h3>
+                   <span class="transition-transform duration-300 group-open:rotate-180">
+                      <i class="fas fa-chevron-down text-[var(--text-white-subtle)]"></i>
+                  </span>
+              </summary>
+              <div class="p-4 sm:p-6 pt-0 text-sm sm:text-base text-[var(--text-white-subtle)]">
+                  בהחלט. יש קבוצת תמיכה סגורה, לייבים תקופתיים, וגישה ישירה לשאלות. רוכשי החבילה המלאה מקבלים גישה לקבוצת VIP עם תמיכה מורחבת.
+              </div>
+          </details>
+
+          <details class="bg-[var(--light-bg)] rounded-xl shadow-lg border border-[var(--dark-accent)] overflow-hidden group">
+              <summary class="flex justify-between items-center p-4 sm:p-6 cursor-pointer list-none">
+                  <h3 class="text-base sm:text-lg font-semibold text-[var(--white)]">כמה זמן אורך כל קורס?</h3>
+                   <span class="transition-transform duration-300 group-open:rotate-180">
+                      <i class="fas fa-chevron-down text-[var(--text-white-subtle)]"></i>
+                  </span>
+              </summary>
+              <div class="p-4 sm:p-6 pt-0 text-sm sm:text-base text-[var(--text-white-subtle)]">
+                  כל קורס מתוכנן לקצב אישי - אפשר להשלים אותו בשבועיים עד חודש בהתאם לזמן שאתה משקיע. החומרים זמינים לצפייה בכל זמן ובכל קצב שנוח לך.
+              </div>
+          </details>
+
+          <details class="bg-[var(--light-bg)] rounded-xl shadow-lg border border-[var(--dark-accent)] overflow-hidden group">
+              <summary class="flex justify-between items-center p-4 sm:p-6 cursor-pointer list-none">
+                  <h3 class="text-base sm:text-lg font-semibold text-[var(--white)]">מה הדרישות הטכניות ללמידה?</h3>
+                   <span class="transition-transform duration-300 group-open:rotate-180">
+                      <i class="fas fa-chevron-down text-[var(--text-white-subtle)]"></i>
+                  </span>
+              </summary>
+              <div class="p-4 sm:p-6 pt-0 text-sm sm:text-base text-[var(--text-white-subtle)]">
+                   מחשב עם חיבור לאינטרנט הוא כל מה שצריך להתחיל. האפליקציות שנלמד עובדות עם כל מערכת הפעלה מודרנית (Windows, Mac, Linux).
+              </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cta" class="py-16 sm:py-20 bg-gradient-to-b from-[var(--background)] to-[#222] border-t border-[var(--dark-accent)]">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-4xl mx-auto text-center animate-on-scroll">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[var(--white)]">
+          בחר את המסלול שלך והתחל לבנות
+        </h2>
+        <p class="text-base sm:text-lg text-[var(--text-white-subtle)] mb-8 max-w-2xl mx-auto">
+          פיתוח אפליקציות הופך נגיש לכולם בעידן ה-AI, עכשיו גם לך יש הזדמנות להוציא לפועל את הרעיונות שלך.
+        </p>
+
+        <!-- Adjusted button padding and gap for mobile -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#pricing" class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border border-transparent text-base sm:text-lg font-medium rounded-full text-[var(--background)] bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent)] hover:brightness-110 shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+            הצטרף לקורס
+            <i class="fas fa-arrow-left mr-2"></i>
+          </a>
+          <a href="#" class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border border-[var(--dark-accent)] text-[var(--text-white-subtle)] text-base sm:text-lg font-medium rounded-full bg-transparent hover:bg-[var(--light-bg)]/50 transition-colors">
+            קבל את הסילבוס המלא במייל
+          </a>
+        </div>
+
+        <div class="mt-8 text-[var(--text-white-subtle)] text-sm">
+          יש שאלות נוספות? <a href="#" class="text-[var(--text-primary)] hover:text-[var(--accent)] underline">דבר איתנו בצ'אט</a> להתייעצות אישית.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <button id="back-to-top" class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[var(--accent)] text-[var(--background)] shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-[var(--text-primary)] transform hover:scale-110 z-50">
+    <i class="fas fa-arrow-up text-sm sm:text-base"></i>
+  </button>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-[var(--background)] border-t border-[var(--dark-accent)]">
+      <div class="container mx-auto px-4 md:px-6">
+        <div class="max-w-5xl mx-auto">
+          <div class="flex flex-col items-center text-center">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-[var(--white)]">מתוכן לתוכנה</h2>
+              <p class="text-sm text-[var(--text-white-subtle)]">פיתוח. ויזואל. בינה מלאכותית.</p>
+            </div>
+  
+            <div class="mb-8">
+              <div class="flex items-center gap-6">
+                <a href="https://www.facebook.com/groups/1155534872864774" class="text-[var(--text-white-subtle)] hover:text-[var(--text-primary)] transition-colors">
+                  <i class="fab fa-facebook-f text-xl"></i>
+                </a>
+                <a href="https://www.instagram.com/software.creators.ai" class="text-[var(--text-white-subtle)] hover:text-[var(--text-primary)] transition-colors">
+                  <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/nadav-naveh/" class="text-[var(--text-white-subtle)] hover:text-[var(--text-primary)] transition-colors">
+                  <i class="fab fa-linkedin-in text-xl"></i>
+                </a>
+                <a href="https://www.youtube.com/@softwarecreatorsai" class="text-[var(--text-white-subtle)] hover:text-[var(--text-primary)] transition-colors">
+                  <i class="fab fa-youtube text-xl"></i>
+                </a>
+                <a href="https://www.tiktok.com/@software.creators.ai" class="text-[var(--text-white-subtle)] hover:text-[var(--text-primary)] transition-colors">
+                  <i class="fab fa-tiktok text-xl"></i>
+                </a>
+              </div>
+            </div>
+  
+            <div class="flex flex-wrap justify-center gap-4 mb-6">
+              <a href="#" class="text-sm text-[var(--text-white-subtle)] hover:text-[var(--text-primary)]">קורסי AI לפיתוח תוכנה</a>
+              <span class="text-[var(--dark-accent)]">|</span>
+              <a href="#" class="text-sm text-[var(--text-white-subtle)] hover:text-[var(--text-primary)]">קורס מידול תמונה עם AI</a>
+              <span class="text-[var(--dark-accent)]">|</span>
+              <a href="#" class="text-sm text-[var(--text-white-subtle)] hover:text-[var(--text-primary)]">שירותי ייעוץ וליווי</a>
+            </div>
+  
+            <div class="text-xs text-[var(--text-white-subtle)]/60">
+              © מתוכן לתוכנה | כל הזכויות שמורות | 2025
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  <script>
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Handle smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const targetId = this.getAttribute('href');
+          // Allow default behavior for non-anchor links or specific IDs if needed
+          if (targetId === '#' || targetId.startsWith('#purchase')) return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            e.preventDefault();
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+        // Touch event for mobile compatibility (optional, click usually works)
+        // anchor.addEventListener('touchend', function(e) { this.click(); });
+      });
+
+      // Intersection Observer for scroll animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -10% 0px'
+      };
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = 1;
+            entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target); // Unobserve after animation
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        el.style.opacity = 0;
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.7s ease-out, transform 0.7s ease-out';
+        observer.observe(el);
+      });
+
+      // Back to top button logic
+      const backToTopBtn = document.getElementById('back-to-top');
+      if (backToTopBtn) {
+        const scrollHandler = () => {
+          if (window.scrollY > 300) {
+            backToTopBtn.classList.remove('opacity-0', 'invisible');
+            backToTopBtn.classList.add('opacity-100', 'visible');
+          } else {
+            backToTopBtn.classList.add('opacity-0', 'invisible');
+            backToTopBtn.classList.remove('opacity-100', 'visible');
+          }
+        };
+
+        window.addEventListener('scroll', scrollHandler);
+        // Run once on load in case the page is already scrolled down
+        scrollHandler();
+
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+        // Touch event for mobile compatibility (optional, click usually works)
+        // backToTopBtn.addEventListener('touchend', function(e) { this.click(); });
+      }
+
+       // FAQ Accordion logic - ensure only one opens at a time (optional enhancement)
+       const detailsElements = document.querySelectorAll('#faq details');
+       detailsElements.forEach(details => {
+            details.addEventListener('toggle', event => {
+                if (details.open) {
+                    detailsElements.forEach(otherDetails => {
+                        if (otherDetails !== details && otherDetails.open) {
+                            otherDetails.removeAttribute('open');
+                        }
+                    });
+                }
+            });
+       });
+
+    }); // End DOMContentLoaded
+  </script>
+</body>
+</html>
